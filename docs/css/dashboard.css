@@ -1,0 +1,136 @@
+:root {
+    --color-bg: #f8fafc;
+    --color-card: #ffffff;
+    --color-text: #1e293b;
+    --color-muted: #64748b;
+    --color-border: #e2e8f0;
+    --color-primary: #3b82f6;
+    --color-success: #22c55e;
+    --color-warning: #f59e0b;
+    --color-danger: #ef4444;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--color-bg);
+    color: var(--color-text);
+    line-height: 1.5;
+}
+
+.nav {
+    background: var(--color-card);
+    border-bottom: 1px solid var(--color-border);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-brand {
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: var(--color-primary);
+}
+
+#last-updated {
+    font-size: 0.875rem;
+    color: var(--color-muted);
+}
+
+.dashboard {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.dashboard h1 {
+    font-size: 1.75rem;
+    margin-bottom: 2rem;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.card {
+    background: var(--color-card);
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    padding: 1.5rem;
+}
+
+.card h2 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+}
+
+.stat {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    line-height: 1;
+    margin-bottom: 0.25rem;
+}
+
+.card p {
+    color: var(--color-muted);
+    font-size: 0.875rem;
+}
+
+.item-list {
+    list-style: none;
+}
+
+.item-list li {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--color-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.item-list li:last-child {
+    border-bottom: none;
+}
+
+.item-list a {
+    color: var(--color-text);
+    text-decoration: none;
+}
+
+.item-list a:hover {
+    color: var(--color-primary);
+}
+
+.status-good {
+    color: var(--color-success);
+}
+
+.status-warning {
+    color: var(--color-warning);
+}
+
+.status-danger {
+    color: var(--color-danger);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .dashboard {
+        padding: 1rem;
+    }
+    
+    .nav {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+    }
+}

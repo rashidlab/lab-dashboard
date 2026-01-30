@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab Status | Rashid Lab</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-brand">Rashid Lab Dashboard</div>
+        <div id="last-updated">Loading...</div>
+    </nav>
+    
+    <main class="dashboard">
+        <h1>Lab Status</h1>
+        
+        <div class="grid">
+            <div class="card">
+                <h2>📊 This Week</h2>
+                <div class="stat" id="total-commits">-</div>
+                <p>Total commits</p>
+            </div>
+            
+            <div class="card">
+                <h2>✅ Action Items</h2>
+                <div class="stat" id="open-items">-</div>
+                <p>Open items</p>
+            </div>
+            
+            <div class="card">
+                <h2>🔴 Needs Attention</h2>
+                <ul class="item-list" id="attention-list">
+                    <li>Loading...</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h2>👥 Students</h2>
+                <ul class="item-list" id="student-list">
+                    <li>Loading...</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        fetch('data/lab-status.json')
+            .then(r => r.json())
+            .then(data => {
+                document.getElementById('last-updated').textContent = 
+                    'Updated: ' + data.generated_at;
+                document.getElementById('total-commits').textContent = 
+                    data.metrics?.total_commits || '0';
+                document.getElementById('open-items').textContent = 
+                    data.action_items?.open || '0';
+                
+                // Attention items
+                const attentionList = document.getElementById('attention-list');
+                if (data.attention_items?.length > 0) {
+                    attentionList.innerHTML = data.attention_items
+                        .slice(0, 5)
+                        .map(i => `<li>${i.student}: ${i.message}</li>`)
+                        .join('');
+                } else {
+                    attentionList.innerHTML = '<li class="status-good">All good! 🎉</li>';
+                }
+                
+                // Students
+                const studentList = document.getElementById('student-list');
+                if (data.students?.length > 0) {
+                    studentList.innerHTML = data.students
+                        .map(s => {
+                            const status = s.status === 'good' ? '✅' : 
+                                          s.status === 'watch' ? '⚠️' : '🔴';
+                            return `<li>
+                                <a href="students/${s.id}.html">${s.name}</a>
+                                <span>${status}</span>
+                            </li>`;
+                        })
+                        .join('');
+                }
+            })
+            .catch(e => {
+                console.error('Failed to load data:', e);
+                document.getElementById('last-updated').textContent = 'Data not available';
+            });
+    </script>
+</body>
+</html>
