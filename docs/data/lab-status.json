@@ -1,14 +1,13 @@
 {
-    "generated_at": "Not yet generated - run workflow to update",
-    "students": [],
-    "attention_items": [],
-    "metrics": {
-        "total_commits": 0,
-        "prs_merged": 0
-    },
-    "action_items": {
-        "open": 0,
-        "overdue": 0,
-        "completed_this_week": 0
-    }
+  "generated_at": "2026-01-30 19:21",
+  "students": [],
+  "attention_items": [],
+  "metrics": {
+    "total_commits": 0,
+    "prs_merged": 0
+  },
+  "action_items": {
+    "open": 0,
+    "overdue": 0
+  }
 }
