@@ -8,6 +8,8 @@
   },
   "action_items": {
     "open": 0,
-    "overdue": 0
-  }
+    "overdue": 0,
+    "completed_this_week": 0
+  },
+  "upcoming_meetings": []
 }

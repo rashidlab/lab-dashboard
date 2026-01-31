@@ -3,87 +3,183 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lab Status | Rashid Lab</title>
+    <title>Lab Dashboard | Rashid Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/dashboard.css">
 </head>
 <body>
     <nav class="nav">
-        <div class="nav-brand">Rashid Lab Dashboard</div>
-        <div id="last-updated">Loading...</div>
+        <a href="https://rashidlab.github.io/lab-handbook/" class="nav-brand">
+            <img src="https://rashidlab.github.io/lab-handbook/assets/images/RLlogoA.png" alt="Rashid Lab">
+        </a>
+        <div class="nav-links">
+            <a href="https://rashidlab.github.io/lab-handbook/" class="nav-link">Handbook</a>
+            <a href="https://rashidlab.github.io/lab-handbook/policies/meetings.html" class="nav-link">Meetings</a>
+            <a href="https://github.com/rashidlab" class="nav-link">GitHub</a>
+            <span id="last-updated">Loading...</span>
+        </div>
     </nav>
-    
+
     <main class="dashboard">
-        <h1>Lab Status</h1>
-        
+        <h1>Lab Dashboard</h1>
+        <p class="subtitle">Quick overview of lab activity and upcoming tasks</p>
+
+        <!-- Status Cards -->
         <div class="grid">
-            <div class="card">
-                <h2>📊 This Week</h2>
+            <div class="card card-primary">
+                <h2>This Week</h2>
                 <div class="stat" id="total-commits">-</div>
-                <p>Total commits</p>
+                <p class="stat-label">Total commits across lab repos</p>
             </div>
-            
-            <div class="card">
-                <h2>✅ Action Items</h2>
+
+            <div class="card card-success">
+                <h2>Action Items</h2>
                 <div class="stat" id="open-items">-</div>
-                <p>Open items</p>
+                <p class="stat-label">Open items from meetings</p>
             </div>
-            
-            <div class="card">
-                <h2>🔴 Needs Attention</h2>
+
+            <div class="card card-warning">
+                <h2>Needs Attention</h2>
                 <ul class="item-list" id="attention-list">
-                    <li>Loading...</li>
-                </ul>
-            </div>
-            
-            <div class="card">
-                <h2>👥 Students</h2>
-                <ul class="item-list" id="student-list">
-                    <li>Loading...</li>
+                    <li class="status-empty">Loading...</li>
                 </ul>
             </div>
         </div>
+
+        <div class="section-divider"></div>
+
+        <!-- Meeting Prep Section -->
+        <h2>Upcoming Meeting Prep</h2>
+        <div class="card card-secondary">
+            <div class="meeting-prep" id="meeting-prep">
+                <div class="prep-item">
+                    <div class="prep-date">Loading...</div>
+                    <div>
+                        <div class="prep-presenter">-</div>
+                        <div class="prep-topic">-</div>
+                    </div>
+                    <span class="prep-status not-started">-</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="quick-actions">
+            <a href="https://github.com/rashidlab/lab-handbook/discussions/categories/lab-meetings" class="quick-action">
+                View Meeting Discussions
+            </a>
+            <a href="https://rashidlab.github.io/lab-handbook/policies/schedule.html" class="quick-action">
+                Meeting Schedule
+            </a>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <!-- Team Section -->
+        <h2>Lab Members</h2>
+        <div class="grid">
+            <div class="card">
+                <ul class="item-list" id="student-list">
+                    <li class="status-empty">Loading...</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="quick-actions">
+            <a href="https://github.com/rashidlab" class="quick-action">
+                GitHub Organization
+            </a>
+            <a href="https://rashidlab.github.io/lab-handbook/onboarding/index.html" class="quick-action">
+                Onboarding Guide
+            </a>
+        </div>
     </main>
-    
+
+    <footer class="footer">
+        Rashid Lab &middot; UNC Chapel Hill &middot; Department of Biostatistics<br>
+        <a href="https://rashidlab.github.io/lab-handbook/">View Lab Handbook</a>
+    </footer>
+
     <script>
         fetch('data/lab-status.json')
             .then(r => r.json())
             .then(data => {
-                document.getElementById('last-updated').textContent = 
+                // Update timestamp
+                document.getElementById('last-updated').textContent =
                     'Updated: ' + data.generated_at;
-                document.getElementById('total-commits').textContent = 
-                    data.metrics?.total_commits || '0';
-                document.getElementById('open-items').textContent = 
-                    data.action_items?.open || '0';
-                
+
+                // Update stats
+                document.getElementById('total-commits').textContent =
+                    data.metrics?.total_commits ?? '0';
+                document.getElementById('open-items').textContent =
+                    data.action_items?.open ?? '0';
+
                 // Attention items
                 const attentionList = document.getElementById('attention-list');
                 if (data.attention_items?.length > 0) {
                     attentionList.innerHTML = data.attention_items
                         .slice(0, 5)
-                        .map(i => `<li>${i.student}: ${i.message}</li>`)
+                        .map(i => `<li><span>${i.student}</span><span>${i.message}</span></li>`)
                         .join('');
                 } else {
-                    attentionList.innerHTML = '<li class="status-good">All good! 🎉</li>';
+                    attentionList.innerHTML = '<li class="status-good">All good!</li>';
                 }
-                
+
                 // Students
                 const studentList = document.getElementById('student-list');
                 if (data.students?.length > 0) {
                     studentList.innerHTML = data.students
                         .map(s => {
-                            const status = s.status === 'good' ? '✅' : 
+                            const status = s.status === 'good' ? '✅' :
                                           s.status === 'watch' ? '⚠️' : '🔴';
                             return `<li>
-                                <a href="students/${s.id}.html">${s.name}</a>
+                                <span>${s.name}</span>
                                 <span>${status}</span>
                             </li>`;
                         })
                         .join('');
+                } else {
+                    studentList.innerHTML = '<li class="status-empty">No students configured yet</li>';
+                }
+
+                // Meeting prep
+                const meetingPrep = document.getElementById('meeting-prep');
+                if (data.upcoming_meetings?.length > 0) {
+                    meetingPrep.innerHTML = data.upcoming_meetings
+                        .slice(0, 3)
+                        .map(m => {
+                            const statusClass = m.status === 'ready' ? 'ready' :
+                                               m.status === 'in-progress' ? 'in-progress' : 'not-started';
+                            const statusText = m.status === 'ready' ? 'Ready' :
+                                              m.status === 'in-progress' ? 'In Progress' : 'Not Started';
+                            return `<div class="prep-item">
+                                <div class="prep-date">${m.date}</div>
+                                <div>
+                                    <div class="prep-presenter">${m.presenter}</div>
+                                    <div class="prep-topic">${m.topic || 'TBD'}</div>
+                                </div>
+                                <span class="prep-status ${statusClass}">${statusText}</span>
+                            </div>`;
+                        })
+                        .join('');
+                } else {
+                    meetingPrep.innerHTML = `
+                        <div class="prep-item">
+                            <div class="prep-date">-</div>
+                            <div>
+                                <div class="prep-presenter status-empty">No upcoming meetings configured</div>
+                                <div class="prep-topic">Check the meeting schedule for dates</div>
+                            </div>
+                            <span class="prep-status not-started">-</span>
+                        </div>`;
                 }
             })
             .catch(e => {
                 console.error('Failed to load data:', e);
                 document.getElementById('last-updated').textContent = 'Data not available';
+                document.getElementById('student-list').innerHTML = '<li class="status-empty">Could not load data</li>';
+                document.getElementById('attention-list').innerHTML = '<li class="status-empty">Could not load data</li>';
             });
     </script>
 </body>
