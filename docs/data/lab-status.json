@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-01-31 11:21",
+  "generated_at": "2026-01-31 12:30",
   "students": [],
   "attention_items": [],
   "metrics": {
@@ -11,5 +11,30 @@
     "overdue": 0,
     "completed_this_week": 0
   },
-  "upcoming_meetings": []
+  "upcoming_meetings": [
+    {
+      "date": "Feb 6",
+      "presenter": "TBD",
+      "topic": "TBD",
+      "status": "not-started"
+    },
+    {
+      "date": "Feb 13",
+      "presenter": "TBD",
+      "topic": "TBD",
+      "status": "not-started"
+    },
+    {
+      "date": "Feb 20",
+      "presenter": "TBD",
+      "topic": "TBD",
+      "status": "not-started"
+    },
+    {
+      "date": "Feb 27",
+      "presenter": "TBD",
+      "topic": "TBD",
+      "status": "not-started"
+    }
+  ]
 }
