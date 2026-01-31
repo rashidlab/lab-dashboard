@@ -18,16 +18,16 @@ permissions:
 jobs:
   update:
     runs-on: ubuntu-latest
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          
-      - run: pip install PyGithub pyyaml
-      
+
+      - run: pip install PyGithub pyyaml requests
+
       - name: Generate dashboard data
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -35,12 +35,14 @@ jobs:
           python << 'SCRIPT'
           import os
           import json
-          from datetime import datetime
+          import yaml
+          import requests
+          from datetime import datetime, date
           from github import Github
-          
+
           gh = Github(os.environ['GITHUB_TOKEN'])
           org_name = os.environ.get('GITHUB_REPOSITORY', '').split('/')[0]
-          
+
           data = {
               "generated_at": datetime.now().strftime('%Y-%m-%d %H:%M'),
               "students": [],
@@ -52,18 +54,59 @@ jobs:
               "action_items": {
                   "open": 0,
                   "overdue": 0
-              }
+              },
+              "upcoming_meetings": []
           }
-          
-          # Try to get action items from lab-meetings
+
+          # Try to fetch rotation.yml from lab-meetings repo
+          try:
+              rotation_url = f"https://raw.githubusercontent.com/{org_name}/lab-meetings/main/schedule/rotation.yml"
+              resp = requests.get(rotation_url)
+              if resp.status_code == 200:
+                  rotation = yaml.safe_load(resp.text)
+
+                  # Get students from roster
+                  if 'roster' in rotation:
+                      for member in rotation['roster']:
+                          data['students'].append({
+                              'name': member['name'],
+                              'github': member.get('github', ''),
+                              'status': 'good'
+                          })
+
+                  # Get upcoming meetings from schedule
+                  if 'schedule' in rotation:
+                      today = date.today()
+                      upcoming = []
+                      for meeting in rotation['schedule']:
+                          meeting_date = datetime.strptime(meeting['date'], '%Y-%m-%d').date()
+                          if meeting_date >= today:
+                              # Format date nicely
+                              date_str = meeting_date.strftime('%b %d')
+                              meeting_type = meeting.get('type', 'meeting').replace('-', ' ').title()
+                              upcoming.append({
+                                  'date': date_str,
+                                  'presenter': meeting['leader'],
+                                  'topic': meeting_type,
+                                  'status': 'not-started'
+                              })
+                      # Take next 4 meetings
+                      data['upcoming_meetings'] = upcoming[:4]
+
+              else:
+                  print(f"Could not fetch rotation.yml: {resp.status_code}")
+          except Exception as e:
+              print(f"Error fetching rotation data: {e}")
+
+          # Try to get action items from lab-meetings issues
           try:
               repo = gh.get_repo(f"{org_name}/lab-meetings")
               issues = list(repo.get_issues(state='open', labels=['action-item']))
               data['action_items']['open'] = len(issues)
-              
+
               overdue = [i for i in issues if any(l.name == 'overdue' for l in i.labels)]
               data['action_items']['overdue'] = len(overdue)
-              
+
               # Add overdue items to attention
               for issue in overdue[:3]:
                   assignee = issue.assignee.login if issue.assignee else 'unassigned'
@@ -73,27 +116,29 @@ jobs:
                       'severity': 'high'
                   })
           except Exception as e:
-              print(f"Could not fetch lab-meetings data: {e}")
-          
+              print(f"Could not fetch lab-meetings issues: {e}")
+
           with open('docs/data/lab-status.json', 'w') as f:
               json.dump(data, f, indent=2)
-          
+
           print("Dashboard data updated")
+          print(f"Students: {len(data['students'])}")
+          print(f"Upcoming meetings: {len(data['upcoming_meetings'])}")
           SCRIPT
-          
+
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "📊 Update dashboard"
+          commit_message: "Update dashboard"
           file_pattern: "docs/data/*.json"
-          
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
-        
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: './docs'
-          
+
       - name: Deploy to Pages
         uses: actions/deploy-pages@v4
