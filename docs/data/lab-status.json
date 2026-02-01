@@ -1,6 +1,32 @@
 {
-  "generated_at": "2026-02-01 11:21",
-  "students": [],
+  "generated_at": "2026-02-01 22:05",
+  "students": [
+    {
+      "name": "Amber Young",
+      "github": "ayoung31",
+      "status": "good"
+    },
+    {
+      "name": "Dinelka Nanayakkara",
+      "github": "dinelka97",
+      "status": "good"
+    },
+    {
+      "name": "Jialiu Xie",
+      "github": "jialiux22",
+      "status": "good"
+    },
+    {
+      "name": "Tyler Humpherys",
+      "github": "tylerbhumpherys",
+      "status": "good"
+    },
+    {
+      "name": "Andrew Walther",
+      "github": "andrew-walther",
+      "status": "good"
+    }
+  ],
   "attention_items": [],
   "metrics": {
     "total_commits": 0,
@@ -10,5 +36,30 @@
     "open": 0,
     "overdue": 0
   },
-  "upcoming_meetings": []
+  "upcoming_meetings": [
+    {
+      "date": "Feb 12",
+      "presenter": "naim-rashid",
+      "topic": "Orientation",
+      "status": "not-started"
+    },
+    {
+      "date": "Feb 26",
+      "presenter": "dinelka97",
+      "topic": "Research Update",
+      "status": "not-started"
+    },
+    {
+      "date": "Mar 12",
+      "presenter": "jialiux22",
+      "topic": "Research Update",
+      "status": "not-started"
+    },
+    {
+      "date": "Mar 26",
+      "presenter": "tylerbhumpherys",
+      "topic": "Research Update",
+      "status": "not-started"
+    }
+  ]
 }
