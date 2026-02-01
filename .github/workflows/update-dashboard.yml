@@ -58,45 +58,66 @@ jobs:
               "upcoming_meetings": []
           }
 
-          # Try to fetch rotation.yml from lab-meetings repo
+          # Try to fetch meeting data from lab-handbook (public) or lab-meetings (private)
+          rotation = None
+
+          # First try lab-handbook (public)
           try:
-              rotation_url = f"https://raw.githubusercontent.com/{org_name}/lab-meetings/main/schedule/rotation.yml"
-              resp = requests.get(rotation_url)
+              handbook_url = f"https://raw.githubusercontent.com/{org_name}/lab-handbook/main/.github/meeting-rotation.yml"
+              resp = requests.get(handbook_url)
               if resp.status_code == 200:
                   rotation = yaml.safe_load(resp.text)
-
-                  # Get students from roster
-                  if 'roster' in rotation:
-                      for member in rotation['roster']:
-                          data['students'].append({
-                              'name': member['name'],
-                              'github': member.get('github', ''),
-                              'status': 'good'
-                          })
-
-                  # Get upcoming meetings from schedule
-                  if 'schedule' in rotation:
-                      today = date.today()
-                      upcoming = []
-                      for meeting in rotation['schedule']:
-                          meeting_date = datetime.strptime(meeting['date'], '%Y-%m-%d').date()
-                          if meeting_date >= today:
-                              # Format date nicely
-                              date_str = meeting_date.strftime('%b %d')
-                              meeting_type = meeting.get('type', 'meeting').replace('-', ' ').title()
-                              upcoming.append({
-                                  'date': date_str,
-                                  'presenter': meeting['leader'],
-                                  'topic': meeting_type,
-                                  'status': 'not-started'
-                              })
-                      # Take next 4 meetings
-                      data['upcoming_meetings'] = upcoming[:4]
-
+                  print(f"Loaded meeting data from lab-handbook")
               else:
-                  print(f"Could not fetch rotation.yml: {resp.status_code}")
+                  print(f"lab-handbook meeting-rotation.yml not found: {resp.status_code}")
           except Exception as e:
-              print(f"Error fetching rotation data: {e}")
+              print(f"Error fetching from lab-handbook: {e}")
+
+          # Fallback to lab-meetings if lab-handbook failed
+          if not rotation:
+              try:
+                  meetings_url = f"https://raw.githubusercontent.com/{org_name}/lab-meetings/main/schedule/rotation.yml"
+                  resp = requests.get(meetings_url)
+                  if resp.status_code == 200:
+                      rotation = yaml.safe_load(resp.text)
+                      print(f"Loaded meeting data from lab-meetings")
+              except Exception as e:
+                  print(f"Error fetching from lab-meetings: {e}")
+
+          if rotation:
+              # Get students from roster (lab-meetings) or lab_members (lab-handbook)
+              roster = rotation.get('roster') or rotation.get('lab_members', [])
+              for member in roster:
+                  data['students'].append({
+                      'name': member['name'],
+                      'github': member.get('github', ''),
+                      'status': 'good'
+                  })
+
+              # Get upcoming meetings from schedule (lab-meetings) or meetings (lab-handbook)
+              schedule = rotation.get('schedule') or rotation.get('meetings', [])
+              today = date.today()
+              upcoming = []
+              for meeting in schedule:
+                  meeting_date = datetime.strptime(meeting['date'], '%Y-%m-%d').date()
+                  if meeting_date >= today:
+                      # Format date nicely
+                      date_str = meeting_date.strftime('%b %d')
+                      # Handle different field names
+                      presenter = meeting.get('leader') or meeting.get('lead', 'TBD')
+                      topic = meeting.get('type') or meeting.get('topic', 'Meeting')
+                      if isinstance(topic, str):
+                          topic = topic.replace('-', ' ').replace('_', ' ').title()
+                      upcoming.append({
+                          'date': date_str,
+                          'presenter': presenter,
+                          'topic': topic,
+                          'status': 'not-started'
+                      })
+              # Take next 4 meetings
+              data['upcoming_meetings'] = upcoming[:4]
+          else:
+              print("Could not load meeting data from any source")
 
           # Try to get action items from lab-meetings issues
           try:
