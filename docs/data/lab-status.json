@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-04 13:57",
+  "generated_at": "2026-06-05 13:51",
   "students": [
     {
       "name": "Amber Young",
@@ -38,12 +38,6 @@
   },
   "upcoming_meetings": [
     {
-      "date": "Jun 04",
-      "presenter": "tylerbhumpherys",
-      "topic": "Research Update",
-      "status": "not-started"
-    },
-    {
       "date": "Jun 18",
       "presenter": "andrew-walther",
       "topic": "Research Update",
@@ -58,6 +52,12 @@
     {
       "date": "Jul 16",
       "presenter": "dinelka97",
+      "topic": "Research Update",
+      "status": "not-started"
+    },
+    {
+      "date": "Aug 06",
+      "presenter": "jialiux22",
       "topic": "Research Update",
       "status": "not-started"
     }
