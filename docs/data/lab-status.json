@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-06 12:55",
+  "generated_at": "2026-08-07 11:44",
   "students": [
     {
       "name": "Amber Young",
@@ -37,12 +37,6 @@
     "overdue": 0
   },
   "upcoming_meetings": [
-    {
-      "date": "Aug 06",
-      "presenter": "jialiux22",
-      "topic": "Research Update",
-      "status": "not-started"
-    },
     {
       "date": "Aug 13",
       "presenter": "tylerbhumpherys",
