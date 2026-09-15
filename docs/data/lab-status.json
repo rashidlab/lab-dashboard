@@ -1,11 +1,6 @@
 {
-  "generated_at": "2026-09-14 16:47",
+  "generated_at": "2026-09-15 15:27",
   "students": [
-    {
-      "name": "Amber Young",
-      "github": "ayoung31",
-      "status": "good"
-    },
     {
       "name": "Dinelka Nanayakkara",
       "github": "dinelka97",
@@ -25,6 +20,11 @@
       "name": "Andrew Walther",
       "github": "andrew-walther",
       "status": "good"
+    },
+    {
+      "name": "Alex Akushevich",
+      "github": "alexakus",
+      "status": "good"
     }
   ],
   "attention_items": [],
@@ -36,5 +36,30 @@
     "open": 0,
     "overdue": 0
   },
-  "upcoming_meetings": []
+  "upcoming_meetings": [
+    {
+      "date": "Oct 01",
+      "presenter": "alexakus",
+      "topic": "New Member Introduction",
+      "status": "not-started"
+    },
+    {
+      "date": "Oct 22",
+      "presenter": "dinelka97",
+      "topic": "Research Update",
+      "status": "not-started"
+    },
+    {
+      "date": "Nov 05",
+      "presenter": "jialiux22",
+      "topic": "Research Update",
+      "status": "not-started"
+    },
+    {
+      "date": "Nov 19",
+      "presenter": "tylerbhumpherys",
+      "topic": "Research Update",
+      "status": "not-started"
+    }
+  ]
 }
