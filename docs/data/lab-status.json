@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-22 15:47",
+  "generated_at": "2026-10-23 15:38",
   "students": [
     {
       "name": "Dinelka Nanayakkara",
@@ -37,12 +37,6 @@
     "overdue": 0
   },
   "upcoming_meetings": [
-    {
-      "date": "Oct 22",
-      "presenter": "dinelka97",
-      "topic": "Research Update",
-      "status": "not-started"
-    },
     {
       "date": "Nov 05",
       "presenter": "jialiux22",
