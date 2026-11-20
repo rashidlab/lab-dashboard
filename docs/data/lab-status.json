@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-19 19:21",
+  "generated_at": "2026-11-20 18:58",
   "students": [
     {
       "name": "Dinelka Nanayakkara",
@@ -38,12 +38,6 @@
   },
   "upcoming_meetings": [
     {
-      "date": "Nov 19",
-      "presenter": "tylerbhumpherys",
-      "topic": "Research Updates",
-      "status": "not-started"
-    },
-    {
       "date": "Dec 03",
       "presenter": "andrew-walther",
       "topic": "Research Update",
@@ -58,6 +52,12 @@
     {
       "date": "Jan 28",
       "presenter": "dinelka97",
+      "topic": "Research Update",
+      "status": "not-started"
+    },
+    {
+      "date": "Feb 11",
+      "presenter": "jialiux22",
       "topic": "Research Update",
       "status": "not-started"
     }
